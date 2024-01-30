@@ -2,6 +2,7 @@ package com.fivesysdev.weatherapp.presenter;
 
 import android.util.Log;
 
+import com.fivesysdev.weatherapp.MainActivity;
 import com.fivesysdev.weatherapp.model.FullWeatherInfo;
 import com.fivesysdev.weatherapp.repository.RemoteRepository;
 
@@ -9,8 +10,12 @@ import java.util.Objects;
 
 public class WeatherPresenter {
     private final RemoteRepository repository;
+    private MainActivity view;
     public WeatherPresenter() {
         repository = new RemoteRepository();
+    }
+    public void attachView(MainActivity view) {
+        this.view = view;
     }
     public void loadFullWeatherInfo() {
 
@@ -18,7 +23,7 @@ public class WeatherPresenter {
 
             @Override
             public void onDataLoaded(FullWeatherInfo info) {
-                Log.d("ON_DATA_LOADED", info.toString());
+                view.displayWeatherInfo(info);
             }
 
             @Override

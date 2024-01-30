@@ -5,7 +5,9 @@ plugins {
 android {
     namespace = "com.fivesysdev.weatherapp"
     compileSdk = 34
-
+    buildFeatures {
+        viewBinding = true
+    }
     defaultConfig {
         applicationId = "com.fivesysdev.weatherapp"
         minSdk = 24
@@ -19,6 +21,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

@@ -6,6 +6,8 @@ import com.fivesysdev.weatherapp.api.CurrentWeatherService;
 import com.fivesysdev.weatherapp.api.RetrofitClient;
 import com.fivesysdev.weatherapp.model.FullWeatherInfo;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -33,9 +35,8 @@ public class RemoteRepository {
         Disposable disposable = RetrofitClient.getInstance()
                 .create(CurrentWeatherService.class)
                 .getCurrentWeatherInfo(API_KEY, LATITUDE_PARAM, LONGITUDE_PARAM, EXCLUDE_PARAM)
-                .repeat()
-                .retry()
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         callback::onDataLoaded,
                         callback::onError
