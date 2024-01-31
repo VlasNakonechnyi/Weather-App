@@ -35,6 +35,7 @@ public class RemoteRepository {
         Disposable disposable = RetrofitClient.getInstance()
                 .create(CurrentWeatherService.class)
                 .getCurrentWeatherInfo(API_KEY, LATITUDE_PARAM, LONGITUDE_PARAM, EXCLUDE_PARAM)
+                .retry()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
