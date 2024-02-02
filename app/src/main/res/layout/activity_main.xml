@@ -1,161 +1,266 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeRefresh"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="match_parent">
 
-    tools:context=".MainActivity">
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/locationTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_16"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Vinnytsia, Ukraine" />
-
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switch1"
-        style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
-        android:layout_width="@dimen/dp_70"
-        android:layout_height="@dimen/dp_50"
-        android:layout_marginStart="@dimen/dp_12"
-        android:layout_marginTop="@dimen/dp_12"
-        android:textOn="@string/Farrenheit"
-        android:textOff="@string/Celcius"
-        app:showText="true"
-        tools:text="Switch"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/locationTextView" />
-    <include
-        android:id="@+id/loadingLayout"
-        layout="@layout/loader"/>
-    <com.google.android.material.card.MaterialCardView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.Material3.CardView.Filled"
+        android:layout_height="match_parent"
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switch1">
+        tools:context=".MainActivity">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/locationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Vinnytsia, Ukraine" />
 
-            android:id="@+id/constraintLayout"
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch1"
+            style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
+            android:layout_width="@dimen/dp_70"
+            android:layout_height="@dimen/dp_50"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginTop="@dimen/dp_12"
+            android:textOff="@string/Celcius"
+            android:textOn="@string/Farrenheit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/locationTextView"
+            app:showText="true"
+            tools:text="Switch" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mainCardView"
+            style="@style/Widget.Material3.CardView.Filled"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_5"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/switch1">
 
-            <LinearLayout
-                android:id="@+id/ll_date_time"
-                android:layout_width="0dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+
+                android:id="@+id/constraintLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_5"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="@id/temperatureTextView"
-                app:layout_constraintEnd_toStartOf="@id/temperatureTextView"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/temperatureTextView">
+                app:layout_constraintTop_toBottomOf="@+id/switch1">
 
-                <com.google.android.material.textview.MaterialTextView
-
-                    android:id="@+id/dateTextView"
-                    style="@style/MaterialAlertDialog.Material3.Body.Text"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:id="@+id/ll_date_time"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dp_5"
-                    tools:text="30.01.2024" />
+                    android:layout_margin="@dimen/dp_5"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="@id/temperatureTextView"
+                    app:layout_constraintEnd_toStartOf="@id/temperatureTextView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/temperatureTextView">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/timeTextView"
-                    style="@style/MaterialAlertDialog.Material3.Title.Text"
-                    android:layout_width="match_parent"
+                    <com.google.android.material.textview.MaterialTextView
+
+                        android:id="@+id/dateTextView"
+                        style="@style/MaterialAlertDialog.Material3.Body.Text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp_5"
+                        tools:text="30.01.2024" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/timeTextView"
+                        style="@style/MaterialAlertDialog.Material3.Title.Text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        tools:text="9:00" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/temperatureTextView"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    tools:text="9:00" />
-            </LinearLayout>
+                    android:textSize="96sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="22" />
 
-            <TextView
-                android:id="@+id/temperatureTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="96sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="22" />
+                <TextView
+                    android:id="@+id/temperatureSymbolTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_5"
+                    app:layout_constraintStart_toEndOf="@+id/temperatureTextView"
+                    app:layout_constraintTop_toTopOf="@id/ll_date_time"
+                    tools:text="C" />
 
-            <TextView
-                android:id="@+id/temperatureSymbolTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp_5"
-                app:layout_constraintStart_toEndOf="@+id/temperatureTextView"
-                app:layout_constraintTop_toTopOf="@id/ll_date_time"
-                tools:text="C" />
+                <TextView
+                    android:id="@+id/windTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_32"
+                    app:layout_constraintEnd_toEndOf="@id/temperatureTextView"
+                    app:layout_constraintStart_toStartOf="@id/ll_date_time"
+                    app:layout_constraintTop_toBottomOf="@id/temperatureTextView"
+                    tools:text="Wind: 17 km/h, North West" />
 
-            <TextView
-                android:id="@+id/windTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_32"
-                app:layout_constraintEnd_toEndOf="@id/temperatureTextView"
-                app:layout_constraintStart_toStartOf="@id/ll_date_time"
-                app:layout_constraintTop_toBottomOf="@id/temperatureTextView"
-                tools:text="Wind: 17 km/h, North West" />
+                <TextView
+                    android:id="@+id/rainProbabilityTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toEndOf="@id/temperatureTextView"
+                    app:layout_constraintStart_toStartOf="@id/ll_date_time"
+                    app:layout_constraintTop_toBottomOf="@id/windTextView"
+                    tools:text="Rain probability: 2%" />
 
-            <TextView
-                android:id="@+id/rainProbabilityTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="@id/temperatureTextView"
-                app:layout_constraintStart_toStartOf="@id/ll_date_time"
-                app:layout_constraintTop_toBottomOf="@id/windTextView"
-                tools:text="Rain probability: 2%" />
+                <ImageView
+                    android:id="@+id/weatherIconImageView"
+                    android:layout_width="@dimen/dp_70"
+                    android:layout_height="@dimen/dp_70"
 
-            <ImageView
-                android:id="@+id/weatherIconTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dp_5"
-                android:contentDescription="@string/blankText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_launcher_foreground" />
+                    android:layout_margin="@dimen/dp_5"
+                    android:contentDescription="@string/blankText"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_launcher_foreground" />
 
-            <TextView
-                android:id="@+id/skyClarityText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_5"
-                android:text="Partly cloudy"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/temperatureTextView" />
+                <TextView
+                    android:id="@+id/skyClarityText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:text="Partly cloudy"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/temperatureTextView" />
 
-            <TextView
-                android:id="@+id/maxTemperatureTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="9"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/windTextView" />
+                <TextView
+                    android:id="@+id/maxTemperatureTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="9"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/windTextView" />
 
-            <TextView
-                android:id="@+id/minTemperatureTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/rainProbabilityTextView" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:id="@+id/minTemperatureTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/rainProbabilityTextView" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+
+            android:id="@+id/materialCardView"
+            style="@style/Widget.Material3.CardView.Filled"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mainCardView">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="@dimen/dp_50"
+                    android:layout_height="@dimen/dp_50"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_launcher_foreground" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/dp_10"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/pressureTextView"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Precipitation: 02348" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/windChillTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginTop="@dimen/dp_10"
+                        tools:text="Wind chill: 1" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/cloudCoverTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginTop="@dimen/dp_10"
+                        tools:text="Cloud cover: 48%" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/uVIndexTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginTop="@dimen/dp_10"
+                        tools:text="UV Index: 0" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/sunriseTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_10"
+
+                        tools:text="Sunrise: 08:12" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/sunsetTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_10"
+
+                        tools:text="Sunset: 17:24" />
+                </LinearLayout>
+
+                <include
+                    android:id="@+id/loadingLayout"
+                    layout="@layout/loader" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/hourlyRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView"
+            tools:listitem="@layout/hourly_info" />
 
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

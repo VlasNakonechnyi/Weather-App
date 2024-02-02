@@ -14,22 +14,27 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 
 import com.fivesysdev.weatherapp.MainActivity;
+import com.fivesysdev.weatherapp.contract.MainContract;
 import com.fivesysdev.weatherapp.model.FullWeatherInfo;
 import com.fivesysdev.weatherapp.repository.RemoteRepository;
 import com.fivesysdev.weatherapp.service.TemperatureService;
 
-public class WeatherPresenter {
+import javax.inject.Inject;
+
+public class WeatherPresenter implements MainContract.Presenter {
     private Handler handler;
-    private final RemoteRepository repository;
-    private MainActivity view;
-    public WeatherPresenter() {
-        repository = new RemoteRepository();
+    @Inject
+    public RemoteRepository repository;
+    @Inject
+    public MainContract.View view;
+    @Inject
+    public WeatherPresenter(MainContract.View view, RemoteRepository repository) {
+        this.view = view;
+        this.repository = repository;
         handler = new Handler();
         scheduleInternetCheck();
     }
-    public void attachView(MainActivity view) {
-        this.view = view;
-    }
+
     public void loadFullWeatherInfo() {
     view.showLoader();
         repository.loadFullWeatherInfo(new RemoteRepository.DataLoadedCallback() {
@@ -37,6 +42,7 @@ public class WeatherPresenter {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataLoaded(FullWeatherInfo info) {
+                Log.d("ON_DATA_LOADED", info.toString());
                 view.hideLoader();
                 view.hideSnackBar();
                 view.displayWeatherInfo(info);
@@ -77,7 +83,7 @@ public class WeatherPresenter {
 
     private boolean isInternetAvailable() {
         ConnectivityManager connectivityManager =
-                (ConnectivityManager) view.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) ((MainActivity)view).getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         android.net.NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
     }

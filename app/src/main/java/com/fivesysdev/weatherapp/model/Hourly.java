@@ -5,17 +5,12 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Current {
+public class Hourly {
+
 
     @SerializedName("dt")
     @Expose
     private Integer dt;
-    @SerializedName("sunrise")
-    @Expose
-    private Integer sunrise;
-    @SerializedName("sunset")
-    @Expose
-    private Integer sunset;
     @SerializedName("temp")
     @Expose
     private Double temp;
@@ -51,7 +46,16 @@ public class Current {
     private Double windGust;
     @SerializedName("weather")
     @Expose
-    private List<Weather> weather;
+    private List<Weather__1> weather;
+    @SerializedName("pop")
+    @Expose
+    private Double pop;
+    @SerializedName("snow")
+    @Expose
+    private Snow snow;
+    @SerializedName("rain")
+    @Expose
+    private Rain rain;
 
     public Integer getDt() {
         return dt;
@@ -59,22 +63,6 @@ public class Current {
 
     public void setDt(Integer dt) {
         this.dt = dt;
-    }
-
-    public Integer getSunrise() {
-        return sunrise;
-    }
-
-    public void setSunrise(Integer sunrise) {
-        this.sunrise = sunrise;
-    }
-
-    public Integer getSunset() {
-        return sunset;
-    }
-
-    public void setSunset(Integer sunset) {
-        this.sunset = sunset;
     }
 
     public Double getTemp() {
@@ -165,13 +153,37 @@ public class Current {
         this.windGust = windGust;
     }
 
-    public List<Weather> getWeather() {
+    public List<Weather__1> getWeather() {
         return weather;
     }
 
-    public void setWeather(List<Weather> weather) {
+    public void setWeather(List<Weather__1> weather) {
         this.weather = weather;
     }
 
+    public Double getPop() {
+        return pop;
+    }
+
+    public void setPop(Double pop) {
+        this.pop = pop;
+    }
+
+    public Snow getSnow() {
+        return snow;
+    }
+
+    public void setSnow(Snow snow) {
+        this.snow = snow;
+    }
+
+    public Rain getRain() {
+        return rain;
+    }
+
+    public void setRain(Rain rain) {
+        this.rain = rain;
+    }
 
 }
+

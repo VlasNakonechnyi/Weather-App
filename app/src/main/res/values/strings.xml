@@ -3,4 +3,11 @@
     <string name="blankText" />
     <string name="Celcius">C</string>
     <string name="Farrenheit">F</string>
+    <string name="Pressure">Pressure</string>
+    <string name="Wind_gust">Wind gust</string>
+    <string name="Cloud_cover">Cloud cover</string>
+    <string name="UV_index">UV index</string>
+    <string name="Sunrise">Sunrise</string>
+    <string name="Sunset">Sunset</string>
+    <string name="Humidity">Humidity</string>
 </resources>

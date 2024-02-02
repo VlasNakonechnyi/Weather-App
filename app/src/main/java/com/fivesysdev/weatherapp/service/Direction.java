@@ -1,13 +1,14 @@
 package com.fivesysdev.weatherapp.service;
 
 public enum Direction {
-    N(0), NE(45), E(90), SE(135), S(180), SW(225), W(270), NW(315);
+    NORTH(0), NORTH_EAST(45), EAST(90), SOUTH_EAST(135), SOUTH(180), SOUTH_WEST(225), WEST(270), NORTH_WEST(315);
 
     Direction(final int degrees) {
         this.degrees = degrees;
     }
 
     private int degrees;
+
 
 
     private static int normalizeDegrees(int degrees) {
@@ -18,7 +19,7 @@ public enum Direction {
 
     public static Direction closestToDegrees(int degrees) {
         degrees = normalizeDegrees(degrees);
-        Direction min = Direction.N;
+        Direction min = Direction.NORTH;
         for (Direction direction: Direction.values()) {
             if (degrees > direction.degrees){
                 min = direction;

@@ -3,9 +3,9 @@ package com.fivesysdev.weatherapp.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class FullWeatherInfo {
-
-
     @SerializedName("lat")
     @Expose
     private Double lat;
@@ -21,6 +21,9 @@ public class FullWeatherInfo {
     @SerializedName("current")
     @Expose
     private Current current;
+    @SerializedName("hourly")
+    @Expose
+    private List<Hourly> hourly;
 
     public Double getLat() {
         return lat;
@@ -62,14 +65,12 @@ public class FullWeatherInfo {
         this.current = current;
     }
 
-    @Override
-    public String toString() {
-        return "FullWeatherInfo{" +
-                "lat=" + lat +
-                ", lon=" + lon +
-                ", timezone='" + timezone + '\'' +
-                ", timezoneOffset=" + timezoneOffset +
-                ", current=" + current +
-                '}';
+    public List<Hourly> getHourly() {
+        return hourly;
     }
+
+    public void setHourly(List<Hourly> hourly) {
+        this.hourly = hourly;
+    }
+
 }
