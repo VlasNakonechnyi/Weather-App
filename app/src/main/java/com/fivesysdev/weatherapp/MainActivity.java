@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     MainContract.Presenter presenter;
     WeatherAppAdapter appAdapter;
     Snackbar snackbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

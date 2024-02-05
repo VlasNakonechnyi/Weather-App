@@ -2,11 +2,8 @@ package com.fivesysdev.weatherapp.presenter;
 
 
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
@@ -17,15 +14,19 @@ import com.fivesysdev.weatherapp.MainActivity;
 import com.fivesysdev.weatherapp.contract.MainContract;
 import com.fivesysdev.weatherapp.model.FullWeatherInfo;
 import com.fivesysdev.weatherapp.repository.RemoteRepository;
+import com.fivesysdev.weatherapp.repository.RemoteRepositoryImpl;
 import com.fivesysdev.weatherapp.service.TemperatureService;
 
 import javax.inject.Inject;
 
+import dagger.hilt.android.scopes.ActivityScoped;
+
+@ActivityScoped
 public class WeatherPresenter implements MainContract.Presenter {
     private Handler handler;
-    @Inject
+
     public RemoteRepository repository;
-    @Inject
+
     public MainContract.View view;
     @Inject
     public WeatherPresenter(MainContract.View view, RemoteRepository repository) {
@@ -37,7 +38,7 @@ public class WeatherPresenter implements MainContract.Presenter {
 
     public void loadFullWeatherInfo() {
     view.showLoader();
-        repository.loadFullWeatherInfo(new RemoteRepository.DataLoadedCallback() {
+        repository.loadFullWeatherInfo(new RemoteRepositoryImpl.DataLoadedCallback() {
 
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override

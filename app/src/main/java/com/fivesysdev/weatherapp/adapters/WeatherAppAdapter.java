@@ -56,6 +56,7 @@ public class WeatherAppAdapter extends RecyclerView.Adapter<WeatherAppAdapter.Vi
         holder.humidity.setText(String.format("%d%%", hourly.getHumidity()));
         holder.temperature.setText(TemperatureService.fromKelvinToCelsius(hourly.getTemp()));
         holder.description.setText(hourlyWeather.getDescription());
+        holder.symbol.setText(TemperatureService.getCelsiusSym());
     }
 
     @Override
@@ -70,6 +71,7 @@ public class WeatherAppAdapter extends RecyclerView.Adapter<WeatherAppAdapter.Vi
         TextView temperature;
         TextView description;
         TextView humidity;
+        TextView symbol;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = HourlyInfoBinding.bind(itemView);
@@ -78,6 +80,7 @@ public class WeatherAppAdapter extends RecyclerView.Adapter<WeatherAppAdapter.Vi
             temperature = binding.hourlyTemperatureTextView;
             description = binding.hourlyDescriptionTextView;
             humidity = binding.humidityTextView;
+            symbol = binding.symbol;
         }
     }
 
