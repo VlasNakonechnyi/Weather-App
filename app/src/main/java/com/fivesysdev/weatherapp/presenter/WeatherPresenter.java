@@ -32,23 +32,17 @@ import dagger.hilt.android.scopes.ActivityScoped;
 
 @ActivityScoped
 public class WeatherPresenter implements MainContract.Presenter {
-    private Handler handler;
+    private final Handler handler;
     private boolean isLocationPermitted;
 
-    public boolean isLocationPermitted() {
-        return isLocationPermitted;
-    }
 
-    public void setLocationPermitted(boolean locationPermitted) {
-        isLocationPermitted = locationPermitted;
-    }
 
     private final RemoteRepository repository;
     private final LocationManager locationManager;
     private Location locationByNetwork;
     private final MainContract.View view;
     private LocationListener networkLocationListener;
-    private Application application;
+    private final Application application;
 
     @Inject
     public WeatherPresenter(
