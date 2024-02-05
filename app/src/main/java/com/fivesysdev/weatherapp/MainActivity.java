@@ -1,6 +1,7 @@
 package com.fivesysdev.weatherapp;
 
 import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -8,10 +9,11 @@ import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.fivesysdev.weatherapp.adapters.WeatherAppAdapter;
 import com.fivesysdev.weatherapp.contract.MainContract;
@@ -19,7 +21,6 @@ import com.fivesysdev.weatherapp.databinding.ActivityMainBinding;
 import com.fivesysdev.weatherapp.model.FullWeatherInfo;
 import com.fivesysdev.weatherapp.model.Hourly;
 import com.fivesysdev.weatherapp.model.Weather;
-import com.fivesysdev.weatherapp.presenter.WeatherPresenter;
 import com.fivesysdev.weatherapp.service.Direction;
 import com.fivesysdev.weatherapp.service.IconService;
 import com.fivesysdev.weatherapp.service.TemperatureService;
@@ -34,12 +35,16 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import io.reactivex.disposables.Disposable;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity implements MainContract.View {
+    private static final int REQUEST_CODE = 5;
     private ActivityMainBinding binding;
     @Inject
     MainContract.Presenter presenter;
+    @Inject
+    Disposable disposable;
     WeatherAppAdapter appAdapter;
     Snackbar snackbar;
 
@@ -47,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        isLocationPermissionGranted();
         appAdapter= new WeatherAppAdapter();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         EdgeToEdge.enable(this);
@@ -68,6 +74,31 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         binding.swipeRefresh.setOnRefreshListener(() -> {
             presenter.loadFullWeatherInfo();
         });
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        disposable.dispose();
+    }
+    private void isLocationPermissionGranted() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{
+                            android.Manifest.permission.ACCESS_FINE_LOCATION,
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION
+                    },
+                    REQUEST_CODE
+            );
+
+        }
     }
 
     @SuppressLint("DefaultLocale")

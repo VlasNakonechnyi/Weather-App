@@ -1,14 +1,23 @@
 package com.fivesysdev.weatherapp.presenter;
 
 
-
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 
 import com.fivesysdev.weatherapp.MainActivity;
 import com.fivesysdev.weatherapp.contract.MainContract;
@@ -24,20 +33,57 @@ import dagger.hilt.android.scopes.ActivityScoped;
 @ActivityScoped
 public class WeatherPresenter implements MainContract.Presenter {
     private Handler handler;
+    private boolean isLocationPermitted;
 
-    public RemoteRepository repository;
-
-    public MainContract.View view;
-    @Inject
-    public WeatherPresenter(MainContract.View view, RemoteRepository repository) {
-        this.view = view;
-        this.repository = repository;
-        handler = new Handler();
-        scheduleInternetCheck();
+    public boolean isLocationPermitted() {
+        return isLocationPermitted;
     }
 
+    public void setLocationPermitted(boolean locationPermitted) {
+        isLocationPermitted = locationPermitted;
+    }
+
+    private final RemoteRepository repository;
+    private final LocationManager locationManager;
+    private Location locationByNetwork;
+    private final MainContract.View view;
+    private LocationListener networkLocationListener;
+    private Application application;
+
+    @Inject
+    public WeatherPresenter(
+            MainContract.View view,
+            RemoteRepository repository,
+            LocationManager locationManager,
+            Application application
+    ) {
+        this.view = view;
+        this.repository = repository;
+        this.locationManager = locationManager;
+        this.application = application;
+        handler = new Handler();
+        initLocationListener();
+        scheduleInternetCheck();
+
+    }
+
+
     public void loadFullWeatherInfo() {
+        if (isInternetAvailable()) {
+
+            if (ActivityCompat.checkSelfPermission(application.getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(application.getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            locationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER,
+                    5000,
+                    0F,
+                    networkLocationListener
+            );
+        }
     view.showLoader();
+        locationByNetwork = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         repository.loadFullWeatherInfo(new RemoteRepositoryImpl.DataLoadedCallback() {
 
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -53,9 +99,8 @@ public class WeatherPresenter implements MainContract.Presenter {
             public void onError(Throwable throwable) {
                 view.hideLoader();
                 view.showSnackBar();
-                Log.d("ON_DATA_LOADED", throwable.getMessage());
             }
-        });
+        }, locationByNetwork.getLatitude(), locationByNetwork.getLongitude());
     }
 
     public void temperatureSwitch(boolean isChecked, Double temperature) {
@@ -89,6 +134,26 @@ public class WeatherPresenter implements MainContract.Presenter {
         return networkInfo != null && networkInfo.isConnected();
     }
 
+    private void initLocationListener() {
+        networkLocationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                locationByNetwork = location;
+            }
 
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            @Override
+            public void onProviderEnabled(@NonNull String provider) {
+            }
+
+            @Override
+            public void onProviderDisabled(@NonNull String provider) {
+            }
+        };
+
+    }
 
 }

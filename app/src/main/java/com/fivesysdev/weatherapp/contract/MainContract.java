@@ -16,6 +16,8 @@ public interface MainContract {
     interface Presenter {
         void loadFullWeatherInfo();
         void temperatureSwitch(boolean isChecked, Double temperature);
+
+
     }
 
 }

@@ -19,10 +19,12 @@ public class RemoteRepositoryImpl implements RemoteRepository{
     private final static String LATITUDE_PARAM = "49.23278";
     private final static String LONGITUDE_PARAM = "28.48097";
     private final static String EXCLUDE_PARAM = "daily,minutely,alerts";
-    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    public Disposable compositeDisposable;
+
     @Inject
-    public RemoteRepositoryImpl(CurrentWeatherService service) {
+    public RemoteRepositoryImpl(CurrentWeatherService service, Disposable compositeDisposable) {
         this.service = service;
+        this.compositeDisposable = compositeDisposable;
     }
 
     public interface DataLoadedCallback {
@@ -32,11 +34,11 @@ public class RemoteRepositoryImpl implements RemoteRepository{
     }
 
 
-    public void loadFullWeatherInfo(DataLoadedCallback callback) {
+    public void loadFullWeatherInfo(DataLoadedCallback callback, double latitude, double longitude) {
         Log.d("ON_DATA_LOADED", "started");
 
         Disposable disposable = service
-                .getCurrentWeatherInfo(API_KEY, LATITUDE_PARAM, LONGITUDE_PARAM, EXCLUDE_PARAM)
+                .getCurrentWeatherInfo(API_KEY, LATITUDE_PARAM, "" + longitude, "" + latitude)
                 .retry()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -45,7 +47,7 @@ public class RemoteRepositoryImpl implements RemoteRepository{
                         callback::onError
                 );
         Log.d("ON_DATA_LOADED", "ended");
-        compositeDisposable.add(disposable);
+        ((CompositeDisposable) compositeDisposable).add(disposable);
 
 
     }
