@@ -39,7 +39,7 @@ import io.reactivex.disposables.Disposable;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity implements MainContract.View {
-    private static final int REQUEST_CODE = 5;
+    private static final int REQUEST_CODE = 1;
     private ActivityMainBinding binding;
     @Inject
     MainContract.Presenter presenter;
@@ -52,12 +52,42 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        isLocationPermissionGranted();
-        appAdapter= new WeatherAppAdapter();
+        appAdapter = new WeatherAppAdapter();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         EdgeToEdge.enable(this);
         setContentView(binding.getRoot());
+        init();
+        if (isLocationPermissionGranted()) {
+            presenter.loadFullWeatherInfo();
+        } else {
+            showMissingPermissionsLayout();
+        }
+    }
 
+    private boolean isLocationPermissionGranted() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION
+                    },
+                    REQUEST_CODE
+            );
+
+            return ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED;
+        } else {
+            return true;
+        }
+    }
+
+    public void init() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -67,38 +97,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         snackbar = Snackbar.make(binding.getRoot(), "No Internet Connection", Snackbar.LENGTH_INDEFINITE)
                 .setAction("Retry", v -> presenter.loadFullWeatherInfo());
 
-
-        presenter.loadFullWeatherInfo();
-
-
         binding.swipeRefresh.setOnRefreshListener(() -> {
             presenter.loadFullWeatherInfo();
         });
-    }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        disposable.dispose();
-    }
-    private void isLocationPermissionGranted() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{
-                            android.Manifest.permission.ACCESS_FINE_LOCATION,
-                            android.Manifest.permission.ACCESS_COARSE_LOCATION
-                    },
-                    REQUEST_CODE
-            );
-
-        }
+        binding.hourlyRecyclerView.setAdapter(appAdapter);
     }
 
     @SuppressLint("DefaultLocale")
@@ -108,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         System.out.println(list);
         appAdapter.setHourlyList(list);
 
-        binding.hourlyRecyclerView.setAdapter(appAdapter);
 
         Date date = new Date();
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFor = new SimpleDateFormat("E, dd MMM, yyyy");
@@ -118,8 +119,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 info.getCurrent().getWindSpeed() +
                 "m/s, " + Direction.closestToDegrees(info.getCurrent().getWindDeg()).name();
 
-        String rainProb = getString(R.string.Humidity)+ ": " + info.getCurrent().getHumidity() + "%";
-        String stringTime = TimeDateService.unixTimeToHh_mm((long)info.getCurrent().getDt());
+        String rainProb = getString(R.string.Humidity) + ": " + info.getCurrent().getHumidity() + "%";
+        String stringTime = TimeDateService.unixTimeToHh_mm((long) info.getCurrent().getDt());
 
         String locationString = info.getTimezone();
         Weather current = info.getCurrent().getWeather().get(0);
@@ -138,33 +139,45 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         binding.locationTextView.setText(locationString);
         Picasso.get().load(IconService.getIconUrl(current.getIcon())).into(binding.imageView);
         Picasso.get().load(IconService.getIconUrl(current.getIcon())).into(binding.weatherIconImageView);
-        binding.pressureTextView.setText(String.format("%s: %d",getString(R.string.Pressure), info.getCurrent().getPressure()));
-        binding.windChillTextView.setText(String.format("%s: %f",getString(R.string.Wind_gust), info.getCurrent().getWindGust()));
-        binding.cloudCoverTextView.setText(String.format("%s: %d%%",getString(R.string.Cloud_cover), info.getCurrent().getClouds()));
-        binding.uVIndexTextView.setText(String.format("%s: %f",getString(R.string.UV_index), info.getCurrent().getUvi()));
-        binding.sunriseTextView.setText(String.format("%s: %s",getString(R.string.Sunrise), TimeDateService.unixTimeToHh_mm((long)info.getCurrent().getSunrise())));
-        binding.sunsetTextView.setText(String.format("%s: %s",getString(R.string.Sunset), TimeDateService.unixTimeToHh_mm((long)info.getCurrent().getSunset())));
+        binding.pressureTextView.setText(String.format("%s: %d", getString(R.string.Pressure), info.getCurrent().getPressure()));
+        binding.windChillTextView.setText(String.format("%s: %f", getString(R.string.Wind_gust), info.getCurrent().getWindGust()));
+        binding.cloudCoverTextView.setText(String.format("%s: %d%%", getString(R.string.Cloud_cover), info.getCurrent().getClouds()));
+        binding.uVIndexTextView.setText(String.format("%s: %f", getString(R.string.UV_index), info.getCurrent().getUvi()));
+        binding.sunriseTextView.setText(String.format("%s: %s", getString(R.string.Sunrise), TimeDateService.unixTimeToHh_mm((long) info.getCurrent().getSunrise())));
+        binding.sunsetTextView.setText(String.format("%s: %s", getString(R.string.Sunset), TimeDateService.unixTimeToHh_mm((long) info.getCurrent().getSunset())));
     }
 
     public void displayFahrenheitTemp(String temp) {
         binding.temperatureTextView.setText(temp);
         binding.temperatureSymbolTextView.setText(TemperatureService.getFahrenheitSym());
     }
+
     public void displayCelsiusTemp(String temp) {
         binding.temperatureTextView.setText(temp);
         binding.temperatureSymbolTextView.setText(TemperatureService.getCelsiusSym());
     }
+
     public void showLoader() {
         binding.loadingLayout.loadingLayout.setVisibility(View.VISIBLE);
     }
+
     public void hideLoader() {
         binding.swipeRefresh.setRefreshing(false);
         binding.loadingLayout.loadingLayout.setVisibility(View.INVISIBLE);
     }
+
     public void showSnackBar() {
         snackbar.show();
     }
+
     public void hideSnackBar() {
-        snackbar.dismiss();
+        if (snackbar.isShown()) snackbar.dismiss();
+    }
+
+    public void showMissingPermissionsLayout() {
+        binding.permissionsLayout.permissionsMissingLayout.setVisibility(View.VISIBLE);
+    }
+    public void hideMissingPermissionsLayout() {
+        binding.permissionsLayout.permissionsMissingLayout.setVisibility(View.INVISIBLE);
     }
 }

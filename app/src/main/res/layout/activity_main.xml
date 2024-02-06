@@ -140,7 +140,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_5"
-                    android:text="Partly cloudy"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/temperatureTextView" />
 
@@ -148,7 +147,6 @@
                     android:id="@+id/maxTemperatureTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="9"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/windTextView" />
 
@@ -156,7 +154,6 @@
                     android:id="@+id/minTemperatureTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/rainProbabilityTextView" />
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -247,6 +244,10 @@
                 <include
                     android:id="@+id/loadingLayout"
                     layout="@layout/loader" />
+                <include
+                    android:id="@+id/permissionsLayout"
+                    layout="@layout/missing_permissions_layout"
+                    />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -259,7 +260,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/materialCardView"
-            tools:listitem="@layout/hourly_info" />
+            tools:listitem="@layout/item_hourly_info" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,9 +1,6 @@
 package com.fivesysdev.weatherapp.adapters;
 
-import static android.provider.Settings.System.getString;
-
 import android.os.Build;
-import android.renderscript.ScriptGroup;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +12,9 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fivesysdev.weatherapp.R;
-import com.fivesysdev.weatherapp.databinding.HourlyInfoBinding;
+
+import com.fivesysdev.weatherapp.databinding.ItemHourlyInfoBinding;
 import com.fivesysdev.weatherapp.model.Hourly;
-import com.fivesysdev.weatherapp.model.Weather;
 import com.fivesysdev.weatherapp.model.Weather__1;
 import com.fivesysdev.weatherapp.service.IconService;
 import com.fivesysdev.weatherapp.service.TemperatureService;
@@ -42,7 +39,7 @@ public class WeatherAppAdapter extends RecyclerView.Adapter<WeatherAppAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.hourly_info, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_hourly_info, parent, false);
         return new ViewHolder(view);
     }
 
@@ -65,7 +62,7 @@ public class WeatherAppAdapter extends RecyclerView.Adapter<WeatherAppAdapter.Vi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        HourlyInfoBinding binding;
+        ItemHourlyInfoBinding binding;
         TextView time;
         ImageView image;
         TextView temperature;
@@ -74,7 +71,7 @@ public class WeatherAppAdapter extends RecyclerView.Adapter<WeatherAppAdapter.Vi
         TextView symbol;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            binding = HourlyInfoBinding.bind(itemView);
+            binding = ItemHourlyInfoBinding.bind(itemView);
             time = binding.timeHourlyTextVIew;
             image = binding.hourlyImageView;
             temperature = binding.hourlyTemperatureTextView;

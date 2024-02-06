@@ -13,7 +13,7 @@ import dagger.hilt.android.components.ActivityComponent;
 @Module
 public class MainActivityModule {
     @Provides
-    MainActivity bindActivity(Activity activity)  {
+    MainActivity provideActivity(Activity activity)  {
         return (MainActivity) activity;
     }
 }

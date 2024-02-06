@@ -9,6 +9,7 @@ android {
     compileSdk = 34
     buildFeatures {
         viewBinding = true
+        android.buildFeatures.buildConfig = true
     }
     defaultConfig {
         applicationId = "com.fivesysdev.weatherapp"
@@ -21,9 +22,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "BASE_URL", "\"https://api.openweathermap.org/data/2.5/\"")
+        }
         release {
             isMinifyEnabled = false
-
+            buildConfigField("String", "BASE_URL", "\"https://api.openweathermap.org/data/2.5/\"")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -51,13 +55,13 @@ dependencies {
     implementation ("com.squareup.retrofit2:adapter-rxjava2:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("com.google.android.material:material:1.11.0")
-    implementation ("com.squareup.picasso:picasso:2.8")
+    implementation ("com.squareup.picasso:picasso:2.71828")
     implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     implementation("com.google.dagger:hilt-android:2.50")
     annotationProcessor ("com.google.dagger:hilt-android-compiler:2.50")
     annotationProcessor ("androidx.hilt:hilt-compiler:1.1.0")
     implementation ("com.google.dagger:dagger:2.50")
-    implementation ("com.google.dagger:dagger-android-support:2.15")
+    implementation ("com.google.dagger:dagger-android-support:2.50")
 
 }
