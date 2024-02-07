@@ -8,7 +8,6 @@ import com.fivesysdev.weatherapp.model.FullWeatherInfo;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import dagger.hilt.android.scopes.ActivityScoped;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -36,11 +35,11 @@ public class RemoteRepositoryImpl implements RemoteRepository{
     }
 
 
-    public void loadFullWeatherInfo(DataLoadedCallback callback) {
+    public void loadFullWeatherInfo(DataLoadedCallback callback, double latitude, double longitude) {
         Log.d("ON_DATA_LOADED", "started");
 
         Disposable disposable = service
-                .getCurrentWeatherInfo(API_KEY, LATITUDE_PARAM, LONGITUDE_PARAM, LATITUDE_PARAM)
+                .getCurrentWeatherInfo(API_KEY, LATITUDE_PARAM, String.valueOf(longitude), String.valueOf(latitude))
                 .retry()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

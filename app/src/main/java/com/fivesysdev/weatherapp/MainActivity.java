@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -57,33 +59,38 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         EdgeToEdge.enable(this);
         setContentView(binding.getRoot());
         init();
+        CheckPermissionGranted();
+    }
+    private void CheckPermissionGranted() {
         if (isLocationPermissionGranted()) {
             presenter.loadFullWeatherInfo();
         } else {
-            showMissingPermissionsLayout();
+            requestPermission();
         }
     }
-
     private boolean isLocationPermissionGranted() {
-        if (ContextCompat.checkSelfPermission(
+        return ContextCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED) {
+        ) == PackageManager.PERMISSION_GRANTED;
+    }
 
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{
-                            android.Manifest.permission.ACCESS_COARSE_LOCATION
-                    },
-                    REQUEST_CODE
-            );
-
-            return ContextCompat.checkSelfPermission(
-                    this,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED;
-        } else {
-            return true;
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(
+                this,
+                new String[]{
+                        android.Manifest.permission.ACCESS_COARSE_LOCATION
+                },
+                REQUEST_CODE
+        );
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                presenter.loadFullWeatherInfo();
+            }
         }
     }
 
@@ -163,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     public void hideLoader() {
         binding.swipeRefresh.setRefreshing(false);
-        binding.loadingLayout.loadingLayout.setVisibility(View.INVISIBLE);
+        binding.loadingLayout.loadingLayout.setVisibility(View.GONE);
     }
 
     public void showSnackBar() {

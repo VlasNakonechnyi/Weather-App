@@ -11,6 +11,8 @@ public interface MainContract {
         void hideLoader();
         void showSnackBar();
         void hideSnackBar();
+
+        void showMissingPermissionsLayout();
     }
 
     interface Presenter {

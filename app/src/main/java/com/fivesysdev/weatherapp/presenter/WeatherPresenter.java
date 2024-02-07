@@ -9,9 +9,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.fivesysdev.weatherapp.MainActivity;
@@ -45,7 +47,7 @@ public class WeatherPresenter implements MainContract.Presenter {
         this.view = view;
         this.repository = repository;
         this.locationManager = locationManager;
-
+        initNetworkLocationListener();
         handler = new Handler();
 
         scheduleInternetCheck();
@@ -56,27 +58,38 @@ public class WeatherPresenter implements MainContract.Presenter {
     @SuppressLint("MissingPermission")
     public void loadFullWeatherInfo() {
         Log.d("ON_DATA_LOADED", "loadFullWeatherInfo STARTED");
+        if(isInternetAvailable()) {
+            try {
+                locationManager.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER,
+                        5000,
+                        0F,
+                        networkLocationListener
+                );
+                locationByNetwork = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                view.showLoader();
+                repository.loadFullWeatherInfo(new RemoteRepositoryImpl.DataLoadedCallback() {
 
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onDataLoaded(FullWeatherInfo info) {
+                        Log.d("ON_DATA_LOADED", info.toString());
+                        view.hideLoader();
+                        view.hideSnackBar();
+                        view.displayWeatherInfo(info);
+                    }
 
-        view.showLoader();
-        repository.loadFullWeatherInfo(new RemoteRepositoryImpl.DataLoadedCallback() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onDataLoaded(FullWeatherInfo info) {
-                Log.d("ON_DATA_LOADED", info.toString());
-                view.hideLoader();
-                view.hideSnackBar();
-                view.displayWeatherInfo(info);
+                    @Override
+                    public void onError(Throwable throwable) {
+                        view.hideLoader();
+                        view.showSnackBar();
+                    }
+                }, locationByNetwork.getLatitude(), locationByNetwork.getLongitude());
+
+            } catch (SecurityException exception) {
+                view.showMissingPermissionsLayout();
             }
-
-            @Override
-            public void onError(Throwable throwable) {
-                view.hideLoader();
-                view.showSnackBar();
-            }
-        });
-
-
+        }
         Log.d("ON_DATA_LOADED", "loadFullWeatherInfo ENDED");
     }
 
@@ -110,6 +123,24 @@ public class WeatherPresenter implements MainContract.Presenter {
                 (ConnectivityManager) ((MainActivity) view).getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         android.net.NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
+    }
+    private void initNetworkLocationListener() {
+
+        networkLocationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                locationByNetwork = location;
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            @Override
+            public void onProviderEnabled(@NonNull String provider) {}
+
+            @Override
+            public void onProviderDisabled(@NonNull String provider) {}
+        };
     }
 
 
