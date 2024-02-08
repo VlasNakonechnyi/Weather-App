@@ -17,8 +17,7 @@ import io.reactivex.schedulers.Schedulers;
 public class RemoteRepositoryImpl implements RemoteRepository{
     public CurrentWeatherService service;
     private final static String API_KEY = "272cf50ecf4de602c6de77fea0cb00ad";
-    private final static String LATITUDE_PARAM = "49.23278";
-    private final static String LONGITUDE_PARAM = "28.48097";
+
     private final static String EXCLUDE_PARAM = "daily,minutely,alerts";
     public Disposable compositeDisposable;
 
@@ -39,7 +38,7 @@ public class RemoteRepositoryImpl implements RemoteRepository{
         Log.d("ON_DATA_LOADED", "started");
 
         Disposable disposable = service
-                .getCurrentWeatherInfo(API_KEY, LATITUDE_PARAM, String.valueOf(longitude), String.valueOf(latitude))
+                .getCurrentWeatherInfo(API_KEY, String.valueOf(latitude), String.valueOf(longitude), EXCLUDE_PARAM)
                 .retry()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

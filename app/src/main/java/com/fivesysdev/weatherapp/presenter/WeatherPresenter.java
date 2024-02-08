@@ -2,19 +2,16 @@ package com.fivesysdev.weatherapp.presenter;
 
 
 import android.annotation.SuppressLint;
-import android.app.Application;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import com.fivesysdev.weatherapp.MainActivity;
 import com.fivesysdev.weatherapp.contract.MainContract;
@@ -24,7 +21,6 @@ import com.fivesysdev.weatherapp.repository.RemoteRepositoryImpl;
 import com.fivesysdev.weatherapp.service.TemperatureService;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import dagger.hilt.android.scopes.ActivityScoped;
 
@@ -37,6 +33,8 @@ public class WeatherPresenter implements MainContract.Presenter {
     private Location locationByNetwork;
     private final MainContract.View view;
     private LocationListener networkLocationListener;
+    private final static double LATITUDE_PARAM = 49.23278;
+    private final static double LONGITUDE_PARAM = 28.48097;
 
     @Inject
     public WeatherPresenter(
@@ -57,41 +55,48 @@ public class WeatherPresenter implements MainContract.Presenter {
 
     @SuppressLint("MissingPermission")
     public void loadFullWeatherInfo() {
+
         Log.d("ON_DATA_LOADED", "loadFullWeatherInfo STARTED");
-        if(isInternetAvailable()) {
-            try {
-                locationManager.requestLocationUpdates(
-                        LocationManager.NETWORK_PROVIDER,
-                        5000,
-                        0F,
-                        networkLocationListener
-                );
-                locationByNetwork = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                view.showLoader();
-                repository.loadFullWeatherInfo(new RemoteRepositoryImpl.DataLoadedCallback() {
 
-                    @RequiresApi(api = Build.VERSION_CODES.O)
-                    @Override
-                    public void onDataLoaded(FullWeatherInfo info) {
-                        Log.d("ON_DATA_LOADED", info.toString());
-                        view.hideLoader();
-                        view.hideSnackBar();
-                        view.displayWeatherInfo(info);
-                    }
+        try {
+            locationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER,
+                    100,
+                    0F,
+                    networkLocationListener
+            );
+            double latitude = LATITUDE_PARAM;
+            double longitude = LONGITUDE_PARAM;
 
-                    @Override
-                    public void onError(Throwable throwable) {
-                        view.hideLoader();
-                        view.showSnackBar();
-                    }
-                }, locationByNetwork.getLatitude(), locationByNetwork.getLongitude());
 
-            } catch (SecurityException exception) {
-                view.showMissingPermissionsLayout();
+            locationByNetwork = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (locationByNetwork != null) {
+                    latitude = locationByNetwork.getLatitude();
+                    longitude = locationByNetwork.getLongitude();
             }
+            view.showLoader();
+            repository.loadFullWeatherInfo(new RemoteRepositoryImpl.DataLoadedCallback() {
+
+                @Override
+                public void onDataLoaded(FullWeatherInfo info) {
+                    Log.d("ON_DATA_LOADED", info.toString());
+                    view.hideLoader();
+                    view.hideSnackBar();
+                    view.displayWeatherInfo(info);
+                }
+
+                @Override
+                public void onError(Throwable throwable) {
+                    view.hideLoader();
+                    view.showSnackBar();
+                }
+            }, latitude, longitude);
+
+        } catch (SecurityException exception) {
+            view.showMissingPermissionsLayout();
         }
-        Log.d("ON_DATA_LOADED", "loadFullWeatherInfo ENDED");
     }
+
 
     public void temperatureSwitch(boolean isChecked, Double temperature) {
         if (isChecked) {
@@ -117,6 +122,9 @@ public class WeatherPresenter implements MainContract.Presenter {
             view.showSnackBar();
         }
     }
+    private boolean isNetworkLocationAvailable() {
+        return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
 
     private boolean isInternetAvailable() {
         ConnectivityManager connectivityManager =
@@ -129,6 +137,7 @@ public class WeatherPresenter implements MainContract.Presenter {
         networkLocationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
+                Log.d("LOCATION___", "WORKED");
                 locationByNetwork = location;
             }
 

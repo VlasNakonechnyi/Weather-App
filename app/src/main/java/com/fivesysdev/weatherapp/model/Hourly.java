@@ -9,52 +9,52 @@ public class Hourly {
 
 
     @SerializedName("dt")
-    @Expose
+
     private Integer dt;
     @SerializedName("temp")
-    @Expose
+
     private Double temp;
     @SerializedName("feels_like")
-    @Expose
+
     private Double feelsLike;
     @SerializedName("pressure")
-    @Expose
+
     private Integer pressure;
     @SerializedName("humidity")
-    @Expose
+
     private Integer humidity;
     @SerializedName("dew_point")
-    @Expose
+
     private Double dewPoint;
     @SerializedName("uvi")
-    @Expose
+
     private Double uvi;
     @SerializedName("clouds")
-    @Expose
+
     private Integer clouds;
     @SerializedName("visibility")
-    @Expose
+
     private Integer visibility;
     @SerializedName("wind_speed")
-    @Expose
+
     private Double windSpeed;
     @SerializedName("wind_deg")
-    @Expose
+
     private Integer windDeg;
     @SerializedName("wind_gust")
-    @Expose
+
     private Double windGust;
     @SerializedName("weather")
-    @Expose
+
     private List<WeatherInfo> weather;
     @SerializedName("pop")
-    @Expose
+
     private Double pop;
     @SerializedName("snow")
-    @Expose
+
     private Snow snow;
     @SerializedName("rain")
-    @Expose
+
     private Rain rain;
 
     public Integer getDt() {

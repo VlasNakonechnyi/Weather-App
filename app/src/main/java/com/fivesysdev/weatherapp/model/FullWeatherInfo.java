@@ -7,22 +7,22 @@ import java.util.List;
 
 public class FullWeatherInfo {
     @SerializedName("lat")
-    @Expose
+
     private Double lat;
     @SerializedName("lon")
-    @Expose
+
     private Double lon;
     @SerializedName("timezone")
-    @Expose
+
     private String timezone;
     @SerializedName("timezone_offset")
-    @Expose
+
     private Integer timezoneOffset;
     @SerializedName("current")
-    @Expose
+
     private Current current;
     @SerializedName("hourly")
-    @Expose
+
     private List<Hourly> hourly;
 
     public Double getLat() {

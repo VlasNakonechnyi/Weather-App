@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="startColorNight">#594690</color>
-    <color name="startColorDay">#a589f5</color>
-    <color name="endColorNight">#643D67</color>
-    <color name="endColorDay">#f5b6fa</color>
+    <color name="start_color_night">#594690</color>
+    <color name="start_color_day">#a589f5</color>
+    <color name="end_color_night">#643D67</color>
+    <color name="end_color_day">#f5b6fa</color>
 
 </resources>

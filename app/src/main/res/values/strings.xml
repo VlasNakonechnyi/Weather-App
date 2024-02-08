@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">Weather App</string>
     <string name="blankText" />
-    <string name="Celcius">C</string>
-    <string name="Farrenheit">F</string>
-    <string name="Pressure">Pressure</string>
-    <string name="Wind_gust">Wind gust</string>
-    <string name="Cloud_cover">Cloud cover</string>
-    <string name="UV_index">UV index</string>
-    <string name="Sunrise">Sunrise</string>
-    <string name="Sunset">Sunset</string>
-    <string name="Humidity">Humidity</string>
+    <string name="celsius">C</string>
+    <string name="fahrenheit">F</string>
+    <string name="pressure">Pressure: %d</string>
+    <string name="wind_gust">Wind gust: %f</string>
+    <string name="cloud_cover">Cloud cover: %d%%</string>
+    <string name="uv_index">UV index: %f</string>
+    <string name="sunrise">Sunrise: %s</string>
+    <string name="sunset">Sunset: %s</string>
+    <string name="humidity">Humidity: %d%%</string>
 </resources>

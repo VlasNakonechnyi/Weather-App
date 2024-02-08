@@ -72,7 +72,7 @@ public class WeatherAppAdapter extends RecyclerView.Adapter<WeatherAppAdapter.Vi
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = ItemHourlyInfoBinding.bind(itemView);
-            time = binding.timeHourlyTextVIew;
+            time = binding.timeHourlyTextView;
             image = binding.hourlyImageView;
             temperature = binding.hourlyTemperatureTextView;
             description = binding.hourlyDescriptionTextView;

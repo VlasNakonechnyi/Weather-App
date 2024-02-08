@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.Material3.CardView.Elevated"
     android:layout_width="@dimen/dp_130"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/dp_180"
     android:layout_marginStart="@dimen/dp_5"
     android:layout_marginTop="@dimen/dp_5"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -15,7 +15,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_margin="@dimen/dp_10"
-        android:id="@+id/timeHourlyTextVIew"
+        android:id="@+id/time_hourly_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="11:00"
@@ -24,17 +24,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/hourlyImageView"
+        android:id="@+id/hourly_image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeHourlyTextVIew"
+        app:layout_constraintTop_toBottomOf="@+id/time_hourly_text_view"
          />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/hourlyTemperatureTextView"
+        android:id="@+id/hourly_temperature_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
@@ -43,27 +43,27 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hourlyImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/hourly_image_view" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/humidityTextView"
+        android:id="@+id/humidity_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         tools:text="70%"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hourlyTemperatureTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/hourly_temperature_text_view" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/hourlyDescriptionTextView"
+        android:id="@+id/hourly_description_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_10"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/humidityTextView"
+        app:layout_constraintTop_toBottomOf="@+id/humidity_text_view"
 
         tools:text="Cloudy" />
 
@@ -73,8 +73,8 @@
         android:textSize="@dimen/sp_10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/humidityTextView"
-        app:layout_constraintTop_toBottomOf="@+id/hourlyImageView" />
+        app:layout_constraintStart_toEndOf="@+id/humidity_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/hourly_image_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
