@@ -18,7 +18,7 @@ import com.fivesysdev.weatherapp.contract.MainContract;
 import com.fivesysdev.weatherapp.model.dto.FullWeatherInfoDto;
 import com.fivesysdev.weatherapp.repository.RemoteRepository;
 import com.fivesysdev.weatherapp.repository.RemoteRepositoryImpl;
-import com.fivesysdev.weatherapp.service.TemperatureService;
+import com.fivesysdev.weatherapp.util.TemperatureService;
 
 import javax.inject.Inject;
 

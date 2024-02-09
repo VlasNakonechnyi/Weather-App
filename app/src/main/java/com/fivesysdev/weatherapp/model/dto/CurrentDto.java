@@ -47,7 +47,7 @@ public class CurrentDto {
     private Double windGust;
     @SerializedName("weather")
 
-    private List<Weather> weather;
+    private List<WeatherDto> weatherDto;
 
     public Integer getDt() {
         return dt;
@@ -161,12 +161,12 @@ public class CurrentDto {
         this.windGust = windGust;
     }
 
-    public List<Weather> getWeather() {
-        return weather;
+    public List<WeatherDto> getWeather() {
+        return weatherDto;
     }
 
-    public void setWeather(List<Weather> weather) {
-        this.weather = weather;
+    public void setWeather(List<WeatherDto> weatherDto) {
+        this.weatherDto = weatherDto;
     }
 
 

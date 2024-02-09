@@ -1,6 +1,5 @@
 package com.fivesysdev.weatherapp.adapters;
 
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,33 +7,36 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fivesysdev.weatherapp.R;
 
 import com.fivesysdev.weatherapp.databinding.ItemHourlyInfoBinding;
-import com.fivesysdev.weatherapp.model.dto.HourlyDto;
-import com.fivesysdev.weatherapp.model.dto.WeatherInfo;
 import com.fivesysdev.weatherapp.model.local.Hourly;
-import com.fivesysdev.weatherapp.service.IconService;
-import com.fivesysdev.weatherapp.service.TemperatureService;
-import com.fivesysdev.weatherapp.service.TimeDateService;
+import com.fivesysdev.weatherapp.model.local.WeatherInfo;
+import com.fivesysdev.weatherapp.util.DiffUtilCallback;
+import com.fivesysdev.weatherapp.util.IconService;
+import com.fivesysdev.weatherapp.util.TemperatureService;
+import com.fivesysdev.weatherapp.util.TimeDateService;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class WeatherAppAdapter extends RecyclerView.Adapter<WeatherAppAdapter.ViewHolder> {
-    List<Hourly> hourlyList = new ArrayList<>();
+    private List<Hourly> hourlyList = new ArrayList<>();
 
     public List<Hourly> getHourlyList() {
         return hourlyList;
     }
 
-    public void setHourlyList(List<Hourly> hourlyList) {
-        this.hourlyList = hourlyList;
-        notifyDataSetChanged();
+    public void setHourlyList(List<Hourly> value) {
+        DiffUtilCallback callback = new DiffUtilCallback(hourlyList, value);
+        DiffUtil.DiffResult diff = DiffUtil.calculateDiff(callback);
+        hourlyList.clear();
+        hourlyList.addAll(value);
+        diff.dispatchUpdatesTo(this);
     }
 
     @NonNull
@@ -44,7 +46,7 @@ public class WeatherAppAdapter extends RecyclerView.Adapter<WeatherAppAdapter.Vi
         return new ViewHolder(view);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Hourly hourly = hourlyList.get(position);

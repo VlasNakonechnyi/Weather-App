@@ -1,4 +1,4 @@
-package com.fivesysdev.weatherapp.service;
+package com.fivesysdev.weatherapp.util;
 
 public class TemperatureService {
     private static final int MIN_LEN = 1;

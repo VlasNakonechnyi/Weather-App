@@ -45,16 +45,16 @@ public class HourlyDto {
     private Double windGust;
     @SerializedName("weather")
 
-    private List<WeatherInfo> weather;
+    private List<WeatherInfoDto> weather;
     @SerializedName("pop")
 
     private Double pop;
     @SerializedName("snow")
 
-    private Snow snow;
+    private SnowDto snowDto;
     @SerializedName("rain")
 
-    private Rain rain;
+    private RainDto rainDto;
 
     public Integer getDt() {
         return dt;
@@ -152,11 +152,11 @@ public class HourlyDto {
         this.windGust = windGust;
     }
 
-    public List<WeatherInfo> getWeather() {
+    public List<WeatherInfoDto> getWeather() {
         return weather;
     }
 
-    public void setWeather(List<WeatherInfo> weather) {
+    public void setWeather(List<WeatherInfoDto> weather) {
         this.weather = weather;
     }
 
@@ -168,20 +168,20 @@ public class HourlyDto {
         this.pop = pop;
     }
 
-    public Snow getSnow() {
-        return snow;
+    public SnowDto getSnow() {
+        return snowDto;
     }
 
-    public void setSnow(Snow snow) {
-        this.snow = snow;
+    public void setSnow(SnowDto snowDto) {
+        this.snowDto = snowDto;
     }
 
-    public Rain getRain() {
-        return rain;
+    public RainDto getRain() {
+        return rainDto;
     }
 
-    public void setRain(Rain rain) {
-        this.rain = rain;
+    public void setRain(RainDto rainDto) {
+        this.rainDto = rainDto;
     }
 
 }

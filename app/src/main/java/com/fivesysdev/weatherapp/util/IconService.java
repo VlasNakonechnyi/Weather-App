@@ -1,4 +1,4 @@
-package com.fivesysdev.weatherapp.service;
+package com.fivesysdev.weatherapp.util;
 
 public class IconService {
     private static final String BASE_URL = "https://openweathermap.org/img/wn/";

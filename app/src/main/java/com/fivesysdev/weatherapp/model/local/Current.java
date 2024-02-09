@@ -1,7 +1,7 @@
 package com.fivesysdev.weatherapp.model.local;
 
-import com.fivesysdev.weatherapp.model.dto.Weather;
-import com.google.gson.annotations.SerializedName;
+import com.fivesysdev.weatherapp.mapper.WeatherAppMapper;
+import com.fivesysdev.weatherapp.model.dto.WeatherDto;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public class Current {
             Double windSpeed,
             Integer windDeg,
             Double windGust,
-            List<Weather> weather
+            List<WeatherDto> weatherDto
     ) {
         this.dt = dt;
         this.sunrise = sunrise;
@@ -59,7 +59,7 @@ public class Current {
         this.windSpeed = windSpeed;
         this.windDeg = windDeg;
         this.windGust = windGust;
-        this.weather = weather;
+        this.weather = WeatherAppMapper.mapWeatherDtoListToWeatherList(weatherDto);
     }
 
     public Integer getDt() {
@@ -157,7 +157,7 @@ public class Current {
         return weather;
     }
 
-    public void setWeather(List<Weather> weather) {
-        this.weather = weather;
+    public void setWeather(List<Weather> weatherDto) {
+        this.weather = weatherDto;
     }
 }

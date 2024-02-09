@@ -1,4 +1,4 @@
-package com.fivesysdev.weatherapp.service;
+package com.fivesysdev.weatherapp.util;
 
 import android.os.Build;
 
