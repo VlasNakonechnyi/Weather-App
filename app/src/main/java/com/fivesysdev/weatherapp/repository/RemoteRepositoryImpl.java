@@ -3,7 +3,7 @@ package com.fivesysdev.weatherapp.repository;
 import android.util.Log;
 
 import com.fivesysdev.weatherapp.api.CurrentWeatherService;
-import com.fivesysdev.weatherapp.model.FullWeatherInfo;
+import com.fivesysdev.weatherapp.model.dto.FullWeatherInfoDto;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -28,7 +28,7 @@ public class RemoteRepositoryImpl implements RemoteRepository{
     }
 
     public interface DataLoadedCallback {
-        void onDataLoaded(FullWeatherInfo info);
+        void onDataLoaded(FullWeatherInfoDto info);
 
         void onError(Throwable throwable);
     }

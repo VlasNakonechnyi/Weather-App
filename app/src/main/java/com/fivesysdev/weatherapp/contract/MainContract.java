@@ -1,10 +1,10 @@
 package com.fivesysdev.weatherapp.contract;
 
-import com.fivesysdev.weatherapp.model.FullWeatherInfo;
+import com.fivesysdev.weatherapp.model.dto.FullWeatherInfoDto;
 
 public interface MainContract {
     interface View {
-        void displayWeatherInfo(FullWeatherInfo info);
+        void displayWeatherInfo(FullWeatherInfoDto info);
         void displayFahrenheitTemp(String temp);
         void displayCelsiusTemp(String temp);
         void showLoader();

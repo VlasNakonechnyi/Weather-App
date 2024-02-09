@@ -1,9 +1,9 @@
-package com.fivesysdev.weatherapp.model;
+package com.fivesysdev.weatherapp.model.dto;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Weather {
+public class WeatherInfo {
 
     @SerializedName("id")
 

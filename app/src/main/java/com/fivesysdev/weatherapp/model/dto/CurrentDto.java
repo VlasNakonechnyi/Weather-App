@@ -1,11 +1,10 @@
-package com.fivesysdev.weatherapp.model;
+package com.fivesysdev.weatherapp.model.dto;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Current {
+public class CurrentDto {
 
     @SerializedName("dt")
     private Integer dt;

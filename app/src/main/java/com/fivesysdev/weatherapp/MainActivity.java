@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -19,9 +20,13 @@ import androidx.core.view.WindowInsetsCompat;
 import com.fivesysdev.weatherapp.adapters.WeatherAppAdapter;
 import com.fivesysdev.weatherapp.contract.MainContract;
 import com.fivesysdev.weatherapp.databinding.ActivityMainBinding;
-import com.fivesysdev.weatherapp.model.FullWeatherInfo;
-import com.fivesysdev.weatherapp.model.Hourly;
-import com.fivesysdev.weatherapp.model.Weather;
+import com.fivesysdev.weatherapp.mapper.WeatherAppMapper;
+import com.fivesysdev.weatherapp.model.dto.FullWeatherInfoDto;
+import com.fivesysdev.weatherapp.model.dto.HourlyDto;
+import com.fivesysdev.weatherapp.model.dto.Weather;
+import com.fivesysdev.weatherapp.model.local.Current;
+import com.fivesysdev.weatherapp.model.local.FullWeatherInfo;
+import com.fivesysdev.weatherapp.model.local.Hourly;
 import com.fivesysdev.weatherapp.service.Direction;
 import com.fivesysdev.weatherapp.service.IconService;
 import com.fivesysdev.weatherapp.service.TemperatureService;
@@ -43,6 +48,7 @@ import io.reactivex.disposables.Disposable;
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity implements MainContract.View {
     private static final int REQUEST_CODE = 1;
+    private static final String EMPTY_STRING = "";
     private ActivityMainBinding binding;
     @Inject
     MainContract.Presenter presenter;
@@ -112,38 +118,43 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         binding.hourlyRecyclerView.setHasFixedSize(true);
     }
 
-    public void displayWeatherInfo(FullWeatherInfo info) {
-        List<Hourly> list = info.getHourly();
+    public void displayWeatherInfo(FullWeatherInfoDto infoDto) {
+        FullWeatherInfo info = WeatherAppMapper.mapFullWeatherInfoDtoToFullWeatherInfo(infoDto);
+        List<HourlyDto> list = info.getHourly();
+
         System.out.println(list);
-        appAdapter.setHourlyList(list);
+        appAdapter.setHourlyList(WeatherAppMapper.mapHourlyDtoListToHourlyList(list));
 
 
         Date date = new Date();
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFor = new SimpleDateFormat("E, dd MMM, yyyy");
         String stringDate = dateFor.format(date);
-        Double temperature = info.getCurrent().getTemp();
-        String windInfo = "Wind: " +
-                info.getCurrent().getWindSpeed() +
-                "m/s, " + Direction.closestToDegrees(info.getCurrent().getWindDeg()).name();
 
+
+        Current current = info.getCurrent();
+        Double temperature = current.getTemp();
+        String windInfo = getString(R.string.wind, current.getWindSpeed(), Direction.closestToDegrees(current.getWindDeg()).name());
         String rainProb = getString(R.string.humidity, info.getCurrent().getHumidity());
         String stringTime = TimeDateService.unixTimeToHh_mm((long) info.getCurrent().getDt());
 
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+
         List<Address> addresses = null;
         try {
             addresses = geocoder.getFromLocation(info.getLat(), info.getLon(), 1);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Log.d("Geocoder", "failed to parse location");
+        }
+
+        String locationString = EMPTY_STRING;
+        if (addresses != null) {
+            locationString = String.format("%s, %s",addresses.get(0).getLocality(), addresses.get(0).getCountryName());
         }
 
 
-        String locationString = addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryName();
-
-
-
-        Weather current = info.getCurrent().getWeather().get(0);
-        String clouds = current.getDescription();
+        Weather weather = info.getCurrent().getWeather().get(0);
+        String clouds = weather.getDescription();
         binding.dateTextView.setText(stringDate);
         binding.temperatureTextView.setText(TemperatureService.fromKelvinToCelsius(temperature));
         binding.temperatureSymbolTextView.setText(TemperatureService.getCelsiusSym());
@@ -154,15 +165,16 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         binding.skyClarityText.setText(clouds);
         binding.switch1.setOnCheckedChangeListener((buttonView, isChecked) -> presenter.temperatureSwitch(isChecked, temperature));
         binding.locationTextView.setText(locationString);
-        Picasso.get().load(IconService.getIconUrl(current.getIcon())).into(binding.imageView);
-        Picasso.get().load(IconService.getIconUrl(current.getIcon())).into(binding.weatherIconImageView);
+        Picasso.get().load(IconService.getIconUrl(weather.getIcon())).into(binding.imageView);
+        Picasso.get().load(IconService.getIconUrl(weather.getIcon())).into(binding.weatherIconImageView);
         setAdditionalInfo(info);
     }
     private void setAdditionalInfo(FullWeatherInfo info) {
-        binding.pressureTextView.setText(getString(R.string.pressure, info.getCurrent().getPressure()));
-        binding.windChillTextView.setText(getString(R.string.wind_gust, info.getCurrent().getWindGust()));
-        binding.cloudCoverTextView.setText(getString(R.string.cloud_cover, info.getCurrent().getClouds()));
-        binding.uvIndexTextView.setText(getString(R.string.uv_index, info.getCurrent().getUvi()));
+        Current current = info.getCurrent();
+        binding.pressureTextView.setText(getString(R.string.pressure, current.getPressure()));
+        binding.windChillTextView.setText(getString(R.string.wind_gust, current.getWindGust()));
+        binding.cloudCoverTextView.setText(getString(R.string.cloud_cover, current.getClouds()));
+        binding.uvIndexTextView.setText(getString(R.string.uv_index, current.getUvi()));
         binding.sunriseTextView.setText(getString(R.string.sunrise, TimeDateService.unixTimeToHh_mm((long) info.getCurrent().getSunrise())));
         binding.sunsetTextView.setText(getString(R.string.sunset, TimeDateService.unixTimeToHh_mm((long) info.getCurrent().getSunset())));
     }

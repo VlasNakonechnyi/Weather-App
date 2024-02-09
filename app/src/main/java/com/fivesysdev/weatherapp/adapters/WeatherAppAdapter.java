@@ -14,8 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.fivesysdev.weatherapp.R;
 
 import com.fivesysdev.weatherapp.databinding.ItemHourlyInfoBinding;
-import com.fivesysdev.weatherapp.model.Hourly;
-import com.fivesysdev.weatherapp.model.WeatherInfo;
+import com.fivesysdev.weatherapp.model.dto.HourlyDto;
+import com.fivesysdev.weatherapp.model.dto.WeatherInfo;
+import com.fivesysdev.weatherapp.model.local.Hourly;
 import com.fivesysdev.weatherapp.service.IconService;
 import com.fivesysdev.weatherapp.service.TemperatureService;
 import com.fivesysdev.weatherapp.service.TimeDateService;
@@ -48,7 +49,7 @@ public class WeatherAppAdapter extends RecyclerView.Adapter<WeatherAppAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Hourly hourly = hourlyList.get(position);
         WeatherInfo hourlyWeather = hourly.getWeather().get(0);
-        holder.time.setText(TimeDateService.unixTimeToHh_mm((long)hourly.getDt()));
+        holder.time.setText(TimeDateService.unixTimeToHh_mm((long) hourly.getDt()));
         Picasso.get().load(IconService.getIconUrl(hourlyWeather.getIcon())).into(holder.image);
         holder.humidity.setText(String.format("%d%%", hourly.getHumidity()));
         holder.temperature.setText(TemperatureService.fromKelvinToCelsius(hourly.getTemp()));

@@ -1,11 +1,10 @@
-package com.fivesysdev.weatherapp.model;
+package com.fivesysdev.weatherapp.model.dto;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class FullWeatherInfo {
+public class FullWeatherInfoDto {
     @SerializedName("lat")
 
     private Double lat;
@@ -20,10 +19,10 @@ public class FullWeatherInfo {
     private Integer timezoneOffset;
     @SerializedName("current")
 
-    private Current current;
+    private CurrentDto currentDto;
     @SerializedName("hourly")
 
-    private List<Hourly> hourly;
+    private List<HourlyDto> hourlyDto;
 
     public Double getLat() {
         return lat;
@@ -57,20 +56,20 @@ public class FullWeatherInfo {
         this.timezoneOffset = timezoneOffset;
     }
 
-    public Current getCurrent() {
-        return current;
+    public CurrentDto getCurrent() {
+        return currentDto;
     }
 
-    public void setCurrent(Current current) {
-        this.current = current;
+    public void setCurrent(CurrentDto currentDto) {
+        this.currentDto = currentDto;
     }
 
-    public List<Hourly> getHourly() {
-        return hourly;
+    public List<HourlyDto> getHourly() {
+        return hourlyDto;
     }
 
-    public void setHourly(List<Hourly> hourly) {
-        this.hourly = hourly;
+    public void setHourly(List<HourlyDto> hourlyDto) {
+        this.hourlyDto = hourlyDto;
     }
 
 }

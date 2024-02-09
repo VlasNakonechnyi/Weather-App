@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 
 import com.fivesysdev.weatherapp.MainActivity;
 import com.fivesysdev.weatherapp.contract.MainContract;
-import com.fivesysdev.weatherapp.model.FullWeatherInfo;
+import com.fivesysdev.weatherapp.model.dto.FullWeatherInfoDto;
 import com.fivesysdev.weatherapp.repository.RemoteRepository;
 import com.fivesysdev.weatherapp.repository.RemoteRepositoryImpl;
 import com.fivesysdev.weatherapp.service.TemperatureService;
@@ -78,7 +78,7 @@ public class WeatherPresenter implements MainContract.Presenter {
             repository.loadFullWeatherInfo(new RemoteRepositoryImpl.DataLoadedCallback() {
 
                 @Override
-                public void onDataLoaded(FullWeatherInfo info) {
+                public void onDataLoaded(FullWeatherInfoDto info) {
                     Log.d("ON_DATA_LOADED", info.toString());
                     view.hideLoader();
                     view.hideSnackBar();
